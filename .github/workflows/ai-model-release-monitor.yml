@@ -1,0 +1,53 @@
+name: AI Model Release Monitor
+
+on:
+  schedule:
+    # Run twice daily at 8 AM and 8 PM CET (6 AM and 6 PM UTC)
+    - cron: '0 6,18 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+          prompt: |
+            Monitor and check for new AI model releases from the following providers:
+            - OpenAI
+            - Anthropic
+            - Google Gemini
+            - Meta (Llama)
+            - Alibaba (Qwen)
+            - xAI (Grok)
+            - Mistral
+            - Cohere
+
+            Search for announcements, new releases, updates and price changes.
+
+            For each significant new release found:
+            - Create a separate GitHub issue with labels: "ai-release" and "importance-[rating]" (e.g., "importance-8")
+            - Include in the issue:
+              - Model name and provider
+              - Key features and capabilities
+              - Release date
+              - Importance rating (1-10, where 10 is most significant/impactful)
+              - Links to official announcements
+
+            Check the existing issues first to avoid duplicates.
+
+            If no new releases are found, simply output that the monitor ran successfully but found no new releases.
