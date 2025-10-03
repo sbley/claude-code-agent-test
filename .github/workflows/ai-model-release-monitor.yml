@@ -2,8 +2,8 @@ name: AI Model Release Monitor
 
 on:
   schedule:
-    # Run twice daily at 8 AM and 8 PM CET (6 AM and 6 PM UTC)
-    - cron: '0 6,18 * * *'
+    # Run once daily at 8 AM CET (6 AM UTC)
+    - cron: '0 6 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
