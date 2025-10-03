@@ -26,6 +26,8 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
+          claude_args: '--allowed-tools WebSearch Bash(gh:*)'
+
           prompt: |
             Monitor and check for new AI model releases from the following providers:
             - OpenAI
